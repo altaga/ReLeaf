@@ -115,34 +115,77 @@ Gracias a Stella Swap y a que su SDK es publico, podemos realizar swaps entre to
 
 <img src="https://i.ibb.co/hLSy59K/vlcsnap-2024-05-05-13h55m45s194.png" width="32%"> <img src="https://i.ibb.co/hVdNSD4/vlcsnap-2024-05-05-13h55m48s943.png" width="32%">
 
-Como se comento antes, a diferencia de un swap desde la plataforma de StellaSwap, nosotros podemos realizar todo el swap mediante una sola transaccion mediante Batch Precompile.
+Como se comento antes, a diferencia de un swap desde la plataforma de StellaSwap, nosotros podemos realizar todo el swap mediante una sola transaccion mediante [Batch Precompile](https://docs.moonbeam.network/builders/pallets-precompiles/precompiles/batch/).
 
     const batchData = this.batchContract.interface.encodeFunctionData(
         'batchAll',
         [
         [this.state.tokenSelected1.address, AGGREGATOR_ADDRESS],
         [],
-        [allowance, data],
+        [allowance, swapData],
         [],
         ],
     );
 
-## Payment:
+## Payment: 
 
-<img src="https://i.ibb.co/HrcQdHM/vlcsnap-2024-05-05-13h56m06s927.png" width="32%"> <img src="https://i.ibb.co/RY8bLkw/vlcsnap-2024-05-05-13h56m11s820.png" width="32%"> <img src="https://i.ibb.co/HYkCXq9/vlcsnap-2024-05-05-13h56m25s677.png" width="32%">
-
-## Savings:
-
-
-<img src="https://i.ibb.co/P9nb73m/vlcsnap-2024-05-05-13h56m32s908.png" width="32%"> <img src="https://i.ibb.co/28VTxY7/vlcsnap-2024-05-05-13h56m38s244.png" width="32%"> <img src="https://i.ibb.co/NKp3rgR/vlcsnap-2024-05-05-13h56m47s323.png" width="32%">
-
-
-## Cards:
-
-
+En esta tab tenemos la intencion que sea igual que utilizar un POS tradicional, este nos permite poner la cantidad a cobrar en dolares americanos y poder relizar el pago con alguna de nuestras tarjetas virtiales. [CODE](./ReLeaf/src/screens/paymentWallet/paymentWallet.js)
 
 <img src="https://i.ibb.co/bdFpD77/vlcsnap-2024-05-05-13h57m37s280.png" width="32%"> <img src="https://i.ibb.co/Sm51S8r/vlcsnap-2024-05-05-13h57m44s761.png" width="32%"> <img src="https://i.ibb.co/QCSfqTK/Screenshot-20240505-150921.png" width="32%">
 
-
+Como se puede observar al ser una AA Card podemos revisar la cantidad de dinero que tiene en todos los tokens disponibles para poder realizar el pago con cualquiera de ellos, ya sea token nativo o ERC20.
 
 <img src="https://i.ibb.co/23f62Rb/Screenshot-20240505-150943.png" width="32%"> <img src="https://i.ibb.co/w7XWsVD/Screenshot-20240505-150949.png" width="32%"> <img src="https://i.ibb.co/0rpNSNn/Screenshot-20240505-150955.png" width="32%">
+
+Finalmente si nuestro dispositivo tiene la opcion de imprimir el ticket de compra, este puede ser impreso al momento.
+
+## Savings:
+
+En la seccion de savings, podremos crear nuestra cuenta de savings, esta cuenta esta ligada a nuestra cuenta principal de la wallet, osea que nuestra wallet sera el owner de esta misma. [CODE](./ReLeaf/src/screens/main/tabs/tab2.js)
+
+<img src="https://i.ibb.co/HrcQdHM/vlcsnap-2024-05-05-13h56m06s927.png" width="32%"> <img src="https://i.ibb.co/RY8bLkw/vlcsnap-2024-05-05-13h56m11s820.png" width="32%"> <img src="https://i.ibb.co/HYkCXq9/vlcsnap-2024-05-05-13h56m25s677.png" width="32%">
+
+### Savings Protocol:
+
+- Balanced Protocol, this protocol performs a weighted rounding according to the amount to be paid in the transaction, so that the larger the transaction, the greater the savings, in order not to affect the user. [CODE](./ReLeaf/src/utils/utils.js)
+
+        export function balancedSavingToken(number, usd1, usd2) {
+            const balance = number * usd1;
+            let amount = 0;
+            if (balance <= 1) {
+                amount = 1;
+            } else if (balance > 1 && balance <= 10) {
+                amount = Math.ceil(balance);
+            } else if (balance > 10 && balance <= 100) {
+                const intBalance = parseInt(balance, 10);
+                const value = parseInt(Math.round(intBalance).toString().slice(-2), 10);
+                let unit = parseInt(Math.round(intBalance).toString().slice(-1), 10);
+                let decimal = parseInt(Math.round(intBalance).toString().slice(-2, -1), 10);
+                if (unit < 5) {
+                unit = '5';
+                decimal = decimal.toString();
+                } else {
+                unit = '0';
+                decimal = (decimal + 1).toString();
+                }
+                amount = intBalance - value + parseInt(decimal + unit, 10);
+            } else if (balance > 100) {
+                const intBalance = parseInt(Math.floor(balance / 10), 10);
+                amount = (intBalance + 1) * 10;
+            }
+            return new Decimal(amount).sub(new Decimal(balance)).div(usd2).toNumber();
+        }
+
+- Percentage protocol, unlike the previous protocol, this one aims to always save a percentage selected in the UI. [CODE](./ReLeaf/src/utils/utils.js)
+
+        export function percentageSaving(number, percentage) {
+            return number * (percentage / 100);
+        }
+
+## Cards:
+
+Por ultimo en la seccion de cards, podremos crear una virtual card, la cual nos servira para poder realizar pagos sin necesidad de nuestra wallet directamente con una tarjeta fisica en cualquier terminal POS con ReLeaf. [CODE](./Cloud%20Functions/Add%20Card/index.js)
+
+<img src="https://i.ibb.co/P9nb73m/vlcsnap-2024-05-05-13h56m32s908.png" width="32%"> <img src="https://i.ibb.co/28VTxY7/vlcsnap-2024-05-05-13h56m38s244.png" width="32%"> <img src="https://i.ibb.co/NKp3rgR/vlcsnap-2024-05-05-13h56m47s323.png" width="32%">
+
+Esta AA Card tiene como owner una wallet controlada completamente por nuestro backend en Google Cloud. Sin embargo la unica forma de realizar pagos desde esta card es mdiante la tarjeta fisica. Y todas las transacciones son ecriptadas mediante SHA256. [CODE](./Cloud%20Functions/Card%20Transaction/index.js)
