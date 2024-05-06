@@ -11,61 +11,61 @@ PLAYSTORE: [LINK](https://play.google.com/apps/testing/com.altaga.releaf)
 
 # System Diagrams:
 
-Nuestro proyecto tiene 4 componentes fundamentales y sus diagramas son los siguientes.
+Our project has 4 fundamental components and their diagrams are as follows.
 
 ## Account Abstraction Creation:
 
 <img src="https://i.ibb.co/Gdkjxym/Re-Leaf-Diagram-Account-Abstraction-drawio.png">
 
-En nuestro modelo de Account Abstraction, todas las cuentas que tengamos aparte de la cuenta principal, sera una [Light Account](https://github.com/alchemyplatform/light-account), la cual es una implementacion de ERC-4337 propuesta por Alchemy e implementada en Moonbeam por nuestro equipo, el codigo de nuestra implementacion podras encontrar todos los archivos en la pestaña de [Contracts](./Contracts/).
+In our Account Abstraction model, all the accounts we have apart from the main account will be a [Light Account](https://github.com/alchemyplatform/light-account), which is a proposed ERC-4337 implementation by Alchemy and implemented in Moonbeam by our team, the code of our implementation you can find all the files in the tab [Contracts](./Contracts/).
 
-- [Entrypoint](./Contracts/core/EntryPoint.sol): Este contrato sirve como punto de entrada para ejecutar comandos en las AA wallets.
+- [Entrypoint](./Contracts/core/EntryPoint.sol): This contract serves as an entry point to execute commands in the AA wallets.
     - EntryPoint Deployment Address: https://moonscan.io/address/0x0835980A1f2f32A12CA510E73bE3954D9F437114    
-- [ReLeafAccountFactory](./Contracts/ReLeafAccountFactory.sol): Este contrato facilita la creacion de los AA wallets para poder mejorar la UI/UX del usuario al crear su wallet.
+- [ReLeafAccountFactory](./Contracts/ReLeafAccountFactory.sol): This contract facilitates the creation of AA wallets in order to improve the user's UI/UX when creating their wallet.
     - ReLeaf Account Factory: https://moonscan.io/address/0x2D991fE2767FF819F6b3dab83625d331ecCe61a3
-- [ReLeafAccount](./Contracts/ReLeafAccount.sol): Ese Contrato por ultimo es la interfaz que se desplegara en la chain una vez la creemos con el Factory, todas las operaciones que se realicen sobre esta wallet deberan realizarse desde la cuenta owner.
+- [ReLeafAccount](./Contracts/ReLeafAccount.sol): Lastly, this Contract is the interface that will be deployed in the chain once we create it with the Factory, all operations carried out on this wallet must be carried out from the owner account.
 
 ## Batch Balances:
 
 <img src="https://i.ibb.co/yhgq6zR/Re-Leaf-Diagram-Balances-drawio.png">
 
-Siguiendo un poco los objetivos de los precompiles de Moonbeam, hemos realizado nuestro propio "precompile" contract el cual sirve para poder realizar una llamada en batch de multiples tokens para obtener sus balances y decimales desde una sola RPC Call. [MORE DETAILS](./ReLeaf/src/screens/main/tabs/tab1.js)
+Following a little the objectives of the Moonbeam precompiles, we have made our own "precompile" contract which serves to be able to make a batch call of multiple tokens to obtain their balances and decimals from a single RPC Call. [MORE DETAILS](./ReLeaf/src/screens/main/tabs/tab1.js)
 
-- [Batch Token Balances](./Contracts/ReLeafBalances.sol): Este contrato sirve para realizar batch token balances.
+- [Batch Token Balances](./Contracts/ReLeafBalances.sol): This contract is used to carry out batch token balances.
     - ReLeafBalances Deployment Address: https://moonscan.io/address/0xcdEE75520dcE5240C39a308A705Ed3D6c6D82664  
 
 ## Batch Payments:
 
 <img src="https://i.ibb.co/f2nxn9T/Re-Leaf-Diagram-Payments-drawio.png">
 
-Uno de los componentes mas importantes en nuestro proyecto es el uso del [Batch Precompile](https://docs.moonbeam.network/builders/pallets-precompiles/precompiles/batch/) para mejorar enormemente la UI/UX del usuario, ya que podemos realizar transacciones mas complejas desde una sola firma al RPC.
+One of the most important components in our project is the use of [Batch Precompile](https://docs.moonbeam.network/builders/pallets-precompiles/precompiles/batch/) to greatly improve the user's UI/UX, since we can perform more complex transactions from a single signature to the RPC.
 
-- Direct Transfer: Podemos realizar una serie de transacciones en batch ya sea de tokens nativos o ERC20, todos en una sola transaccion. [MORE DETAILS](#send)
+- Direct Transfer: We can carry out a series of batch transactions with either native or ERC20 tokens, all in a single transaction. [MORE DETAILS](#send)
 
-    - Si esta encendida la cuenta de savings, segun el protocolo de saving que este activado, se adjuntara una transaccion extra al batch el cual mandara dinero a esa cuenta. [MORE DETAILS](#savings) 
+     - If the savings account is turned on, according to the saving protocol that is activated, an extra transaction will be attached to the batch which will send money to that account. [MORE DETAILS](#savings)
 
-- Card Payment: Podemos realizar pagos sin necesidad de nuestra wallet, unicamente desde nuestra tarjeta ligada a nuestra Account Abstraction Card Wallet. [MORE DETAILS](#payment)
+- Card Payment: We can make payments without needing our wallet, only from our card linked to our Account Abstraction Card Wallet. [MORE DETAILS](#payment)
 
 ## Swap Tokens:
 
 <img src="https://i.ibb.co/0tf7gSV/Re-Leaf-Diagram-Swap-drawio.png">
 
-De la misma forma que en los batch paymens, hemos realizado el codigo necesario para poder mejorar la user experience de el swap de Stellaswap para realizar todos los swaps desde una sola transaccion en batch. [MORE DETAILS](#swap)
+In the same way as in batch paymens, we have made the necessary code to improve the user experience of the Stellaswap swap to carry out all swaps from a single batch transaction. [MORE DETAILS](#swap)
 
-- Swap SDK: se tomo como base el swap-sdk de stella swap, pero se adapto para funcionar con la funcion Swap.
+- Swap SDK: The stella swap swap-sdk was based on it, but it was adapted to work with the Swap function.
     - Swap-SDK: https://github.com/stellaswap/swap-sdk/tree/main
 
 # Screens:
 
-ReLeaf es una solucion integral de pagos, savings y tarjetas. Integrado los SDK y Precompiles del ecosistema de Moonbeam en una sola aplicacion.
+ReLeaf is a comprehensive payment, savings and card solution. Integrated the SDKs and Precompiles of the Moonbeam ecosystem in a single application.
 
 ## Wallet:
 
-Como base para utilizar todos los servicios y recursos de Moonbeam, creamos una wallet sencilla, la cual nos permite visualizar los Assets en la red de moonbeam. [CODE](./ReLeaf/src/screens/main/tabs/tab1.js)
+As a basis for using all Moonbeam services and resources, we created a simple wallet, which allows us to view the Assets on the moonbeam network. [CODE](./ReLeaf/src/screens/main/tabs/tab1.js)
 
 <img src="https://i.ibb.co/m9gwVzc/vlcsnap-2024-05-05-13h55m07s508.png" width="32%">
 
-A su vez esta tab integra el contrato de [ReLeafBalances](./Contracts/ReLeafBalances.sol), el cual nos permite obtener todos los balances de todos los X-Tokens en el ecosistema de Moonbeam desde una sola RPC Call.
+In turn, this tab integrates the contract of [ReLeafBalances](./Contracts/ReLeafBalances.sol), which allows us to obtain all the balances of all the X-Tokens in the Moonbeam ecosystem from a single RPC Call.
 
     const tokenBalances = new ethers.Contract(
         BatchTokenBalancesAddress,
@@ -80,11 +80,11 @@ A su vez esta tab integra el contrato de [ReLeafBalances](./Contracts/ReLeafBala
 
 ## Send:
 
-Con la funcion de send, podemos realizar envios de native tokens o ERC20 tokens en batch, lo que quiere decir que todas las transacciones se ejecutaran en la misma transaccion. [CODE](./ReLeaf/src/screens/sendWallet/sendWallet.js)
+With the send function, we can send native tokens or ERC20 tokens in batch, which means that all transactions will be executed in the same transaction. [CODE](./ReLeaf/src/screens/sendWallet/sendWallet.js)
 
 <img src="https://i.ibb.co/XV1BYJQ/vlcsnap-2024-05-05-13h55m25s064.png" width="32%"> <img src="https://i.ibb.co/K6ztVJz/vlcsnap-2024-05-05-13h55m28s247.png" width="32%"> <img src="https://i.ibb.co/xJXSbNg/vlcsnap-2024-05-05-13h55m31s607.png" width="32%">
 
-Es muy importante revisar que todas las transacciones son ejecutadas mediante el [Batch Precompile](https://docs.moonbeam.network/builders/pallets-precompiles/precompiles/batch/) Contract de Moonbeam. 
+It is very important to check that all transactions are executed through the [Batch Precompile](https://docs.moonbeam.network/builders/pallets-precompiles/precompiles/batch/) Contract of Moonbeam. 
 
     this.batchContract = new ethers.Contract(
         BatchTransactionsAddress,
@@ -105,17 +105,17 @@ Es muy importante revisar que todas las transacciones son ejecutadas mediante el
 
 ## Receive:
 
-Con esta pantalla, puedes de forma sencilla mostrar tu Wallet para recibir fondos, ya sea native tokens o ERC20. [CODE](./ReLeaf/src/screens/depositWallet/depositWallet.js) 
+With this screen, you can easily show your Wallet to receive funds, whether native tokens or ERC20. [CODE](./ReLeaf/src/screens/depositWallet/depositWallet.js) 
 
 <img src="https://i.ibb.co/bbBZ17k/vlcsnap-2024-05-05-13h55m38s880.png" width="32%">
 
 ## Swap:
 
-Gracias a Stella Swap y a que su SDK es publico, podemos realizar swaps entre tokens, ya sea nativo o ERC20. [CODE](./ReLeaf/src/screens/swapWallet/swapWallet.js)
+Thanks to Stella Swap and the fact that its SDK is public, we can make swaps between tokens, whether native or ERC20. [CODE](./ReLeaf/src/screens/swapWallet/swapWallet.js)
 
 <img src="https://i.ibb.co/hLSy59K/vlcsnap-2024-05-05-13h55m45s194.png" width="32%"> <img src="https://i.ibb.co/hVdNSD4/vlcsnap-2024-05-05-13h55m48s943.png" width="32%">
 
-Como se comento antes, a diferencia de un swap desde la plataforma de StellaSwap, nosotros podemos realizar todo el swap mediante una sola transaccion mediante [Batch Precompile](https://docs.moonbeam.network/builders/pallets-precompiles/precompiles/batch/).
+As mentioned before, unlike a swap from the StellaSwap platform, we can carry out the entire swap through a single transaction through [Batch Precompile](https://docs.moonbeam.network/builders/pallets-precompiles/precompiles/batch/).
 
     const batchData = this.batchContract.interface.encodeFunctionData(
         'batchAll',
@@ -129,19 +129,19 @@ Como se comento antes, a diferencia de un swap desde la plataforma de StellaSwap
 
 ## Payment: 
 
-En esta tab tenemos la intencion que sea igual que utilizar un POS tradicional, este nos permite poner la cantidad a cobrar en dolares americanos y poder relizar el pago con alguna de nuestras tarjetas virtiales. [CODE](./ReLeaf/src/screens/paymentWallet/paymentWallet.js)
+In this tab we intend to make it the same as using a traditional POS, this allows us to enter the amount to be charged in American dollars and to be able to make the payment with one of our virtual cards. [CODE](./ReLeaf/src/screens/paymentWallet/paymentWallet.js)
 
 <img src="https://i.ibb.co/bdFpD77/vlcsnap-2024-05-05-13h57m37s280.png" width="32%"> <img src="https://i.ibb.co/Sm51S8r/vlcsnap-2024-05-05-13h57m44s761.png" width="32%"> <img src="https://i.ibb.co/QCSfqTK/Screenshot-20240505-150921.png" width="32%">
 
-Como se puede observar al ser una AA Card podemos revisar la cantidad de dinero que tiene en todos los tokens disponibles para poder realizar el pago con cualquiera de ellos, ya sea token nativo o ERC20.
+As you can see, since it is an AA Card, we can review the amount of money it has in all the available tokens to be able to make the payment with any of them, whether it is a native token or ERC20.
 
 <img src="https://i.ibb.co/23f62Rb/Screenshot-20240505-150943.png" width="32%"> <img src="https://i.ibb.co/w7XWsVD/Screenshot-20240505-150949.png" width="32%"> <img src="https://i.ibb.co/0rpNSNn/Screenshot-20240505-150955.png" width="32%">
 
-Finalmente si nuestro dispositivo tiene la opcion de imprimir el ticket de compra, este puede ser impreso al momento.
+Finally, if our device has the option to print the purchase receipt, it can be printed immediately.
 
 ## Savings:
 
-En la seccion de savings, podremos crear nuestra cuenta de savings, esta cuenta esta ligada a nuestra cuenta principal de la wallet, osea que nuestra wallet sera el owner de esta misma. [CODE](./ReLeaf/src/screens/main/tabs/tab2.js)
+In the savings section, we can create our savings account, this account is linked to our main wallet account, meaning that our wallet will be the owner of it. [CODE](./ReLeaf/src/screens/main/tabs/tab2.js)
 
 <img src="https://i.ibb.co/HrcQdHM/vlcsnap-2024-05-05-13h56m06s927.png" width="32%"> <img src="https://i.ibb.co/RY8bLkw/vlcsnap-2024-05-05-13h56m11s820.png" width="32%"> <img src="https://i.ibb.co/HYkCXq9/vlcsnap-2024-05-05-13h56m25s677.png" width="32%">
 
@@ -184,8 +184,8 @@ En la seccion de savings, podremos crear nuestra cuenta de savings, esta cuenta 
 
 ## Cards:
 
-Por ultimo en la seccion de cards, podremos crear una virtual card, la cual nos servira para poder realizar pagos sin necesidad de nuestra wallet directamente con una tarjeta fisica en cualquier terminal POS con ReLeaf. [CODE](./Cloud%20Functions/Add%20Card/index.js)
+Finally, in the cards section, we can create a virtual card, which will help us make payments without the need for our wallet directly with a physical card in any POS terminal with ReLeaf. [CODE](./Cloud%20Functions/Add%20Card/index.js)
 
 <img src="https://i.ibb.co/P9nb73m/vlcsnap-2024-05-05-13h56m32s908.png" width="32%"> <img src="https://i.ibb.co/28VTxY7/vlcsnap-2024-05-05-13h56m38s244.png" width="32%"> <img src="https://i.ibb.co/NKp3rgR/vlcsnap-2024-05-05-13h56m47s323.png" width="32%">
 
-Esta AA Card tiene como owner una wallet controlada completamente por nuestro backend en Google Cloud. Sin embargo la unica forma de realizar pagos desde esta card es mdiante la tarjeta fisica. Y todas las transacciones son ecriptadas mediante SHA256. [CODE](./Cloud%20Functions/Card%20Transaction/index.js)
+This AA Card has as its owner a wallet completely controlled by our backend in Google Cloud. However, the only way to make payments from this card is through the physical card. And all transactions are encrypted using SHA256.[CODE](./Cloud%20Functions/Card%20Transaction/index.js)
