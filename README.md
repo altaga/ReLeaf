@@ -9,6 +9,8 @@ WALLET CODE: [CODE](./ReLeaf/)
 
 PLAYSTORE: [LINK](https://play.google.com/apps/testing/com.altaga.releaf)
 
+VIDEODEMO: [VIDEO](https://youtu.be/Q1TATFX0OQw)
+
 # System Diagrams:
 
 Our project has 4 fundamental components and their diagrams are as follows.
@@ -188,4 +190,4 @@ Finally, in the cards section, we can create a virtual card, which will help us 
 
 <img src="https://i.ibb.co/P9nb73m/vlcsnap-2024-05-05-13h56m32s908.png" width="32%"> <img src="https://i.ibb.co/28VTxY7/vlcsnap-2024-05-05-13h56m38s244.png" width="32%"> <img src="https://i.ibb.co/NKp3rgR/vlcsnap-2024-05-05-13h56m47s323.png" width="32%">
 
-This AA Card has as its owner a wallet completely controlled by our backend in Google Cloud. However, the only way to make payments from this card is through the physical card. And all transactions are encrypted using SHA256.[CODE](./Cloud%20Functions/Card%20Transaction/index.js)
+This AA Card has as its owner a wallet completely controlled by our backend in Google Cloud. However, the only way to make payments from this card is through the physical card. And all transactions are encrypted using SHA256. [CODE](./Cloud%20Functions/Card%20Transaction/index.js)
