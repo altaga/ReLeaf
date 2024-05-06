@@ -7,7 +7,7 @@ ReLeaf Wallet: Batch transactions, smart savings, and easy card payments.
 
 WALLET CODE: [CODE](./ReLeaf/)
 
-PLAYSTORE: [LINK](https://play.google.com/apps/testing/com.altaga.releaf)
+PLAYSTORE: [LINK](https://play.google.com/store/apps/details?id=com.altaga.releaf)
 
 VIDEODEMO: [VIDEO](https://youtu.be/Q1TATFX0OQw)
 
