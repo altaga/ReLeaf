@@ -1,6 +1,8 @@
 # ReLeaf
 ReLeaf Wallet: Batch transactions, smart savings, and easy card payments.
 
+## WINNER of the Polkadot Hackathon North America 2024
+
 <img src="https://i.ibb.co/18R68Ym/New-Project.png">
 
 ## Fast Links:
